@@ -141,7 +141,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     import os.path as op
     from glob import glob
     import ggseg
-
+    fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 
     # A figure is created by the joint dimensions of the whole-brain outlines
@@ -170,7 +170,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     # A colorbar is added
     _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
 
-    plt.show()
+    return fig
 
 
 def plot_jhu(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',

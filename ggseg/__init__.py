@@ -79,7 +79,7 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig,
     if not fig:
         print("No figure passed in. Creating a new figure for every plot.")
         fig = plt.figure(figsize=figsize, facecolor=background)
-        ax.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
+        ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
                       xlim=(xmin, xmax),  # centering
                       ylim=(ymax, ymin),  # centering, upside down
                       xticks=[], yticks=[])  # no ticks

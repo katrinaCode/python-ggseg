@@ -49,7 +49,7 @@ def _add_shared_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
     import matplotlib
     from mpl_toolkits.axes_grid1 import make_axes_locatable
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes('right', size='50%', pad=1)
+    cax = divider.append_axes('right', size='50%', pad=0)
 
     cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
                                            norm=norm,

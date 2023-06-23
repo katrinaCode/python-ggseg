@@ -81,10 +81,10 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig,
         fig = plt.figure(figsize=figsize, facecolor=background)
 
     ax = fig.add_subplot(subplot[0], subplot[1], subplot[2])
-    ax.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
-                      xlim=(xmin, xmax),  # centering
-                      ylim=(ymax, ymin),  # centering, upside down
-                      xticks=[], yticks=[])  # no ticks
+    #ax.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
+                    #  xlim=(xmin, xmax),  # centering
+                    #  ylim=(ymax, ymin),  # centering, upside down
+                    #  xticks=[], yticks=[])  # no ticks
     ax.set_title(title, fontsize=fontsize, y=1.03, x=0.55, color=edgecolor)
     return ax
 

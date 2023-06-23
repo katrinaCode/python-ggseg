@@ -85,7 +85,11 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig,
                       xticks=[], yticks=[])  # no ticks
 
     else:
-        ax = fig.add_subplot(subplot[0], subplot[1], subplot[2])
+        ax = fig.add_subplot(subplot[0], subplot[1], subplot[2],
+                            frame_on=False, aspect=1,
+                            xlim=(xmin, xmax),  # centering
+                            ylim=(ymax, ymin),  # centering, upside down
+                            xticks=[], yticks=[])
     
     # og title location: y=1.03, x=0.55,
     ax.set_title(title, fontsize=fontsize,  color=edgecolor)

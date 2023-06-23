@@ -45,6 +45,18 @@ def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
     cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
     cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
+def _add_shared_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
+    import matplotlib
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes('right', size='50%', pad=1)
+
+    cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
+                                           norm=norm,
+                                           orientation='vertical',
+                                           ticklocation='left')
+    cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
+    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -194,7 +206,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         if (subplot[0]*subplot[1]-1) == (subplot[2]):
             print("here")
             cax = fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_colorbar_(cax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+            _add_shared_colorbar_(cax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 

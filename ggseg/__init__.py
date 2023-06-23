@@ -177,8 +177,8 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
 
     # A colorbar is added
     _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
-    print("not returning ax", ax)
-    return #ax
+    print("returning ax", ax)
+    return ax
 
 
 def plot_jhu(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',

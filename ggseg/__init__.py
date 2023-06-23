@@ -189,8 +189,9 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     if not shareCbar:
         _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
     else:
-        if subplot[0]*subplot[1] == subplot[2]:
-            _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+        if subplot[0]*(subplot[1]) == (subplot[2]-1):
+            cax = fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
+            _add_colorbar_(cax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 

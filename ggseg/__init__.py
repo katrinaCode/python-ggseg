@@ -190,6 +190,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
     else:
         if subplot[0]*(subplot[1]) == (subplot[2]-1):
+            print("here")
             ax = fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
             _add_colorbar_(cax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
         

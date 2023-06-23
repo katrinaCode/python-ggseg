@@ -121,7 +121,7 @@ def _get_cmap_(cmap, values, vminmax=[]):
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize=15, fig = None, subplot=(1,1,1)):
+             fontsize=15, fig = None, subplot=(1,1,1), shareCbar = False):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
 
     Parameters
@@ -151,6 +151,9 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             Needed for iterative subplotting. Figure must be created outside of plot_dk call so multiple axes can be added
     subplot: tuple, optional
             To add multiple ggseg figures to one subplot
+    shareCbar: boolean, option
+            To share one colourbar for all subplots
+    
     """
     import matplotlib.pyplot as plt
     import os.path as op
@@ -183,8 +186,12 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     _render_regions_(files, ax, 'gray', edgecolor)
 
     # A colorbar is added
-    _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
-                 
+    if not shareCbar:
+        _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+    else:
+        if subplot[0]*subplot[1] == subplot[2]:
+            _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+        
     print("returning fig & ax", fig, ax)
    # try: 
      #   print("trying")

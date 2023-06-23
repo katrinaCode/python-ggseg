@@ -64,7 +64,7 @@ def _render_data_(data, wd, cmap, norm, ax, edgecolor):
             pass
 
 
-def _create_figure_(files, figsize, background, title, fontsize, edgecolor, subplot):
+def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot):
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -76,8 +76,10 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor, subp
     ymin += yoff
     verts = np.array([(x, y + yoff) for x, y in verts])
 
-    fig = plt.figure(figsize=figsize, facecolor=background)
-    fig.add_subplot(subplot)
+    if not fig:
+        fig = plt.figure(figsize=figsize, facecolor=background)
+
+    fig.add_subplot(subplot[0], subplot[1], subplot[2])
     ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
                       xlim=(xmin, xmax),  # centering
                       ylim=(ymax, ymin),  # centering, upside down
@@ -111,7 +113,7 @@ def _get_cmap_(cmap, values, vminmax=[]):
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize=15, subplot=(1,1,1)):
+             fontsize=15, fig = None, subplot=(1,1,1)):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
 
     Parameters
@@ -137,6 +139,8 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             Title displayed above the figure, passed to matplotlib.axes.Axes.set_title
     fontsize: int, optional
             Relative font size for all elements (ticks, labels, title)
+    fig: matplotlib figure object, optional
+            Needed for iterative subplotting. Figure must be created outside of plot_dk call so multiple axes can be added
     subplot: tuple, optional
             To add multiple ggseg figures to one subplot
     """
@@ -144,14 +148,14 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     import os.path as op
     from glob import glob
     import ggseg
-    fig = plt.figure()
+    #fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 
     # A figure is created by the joint dimensions of the whole-brain outlines
     whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
                  'medial_right']
     files = [open(op.join(wd, e)).read() for e in whole_reg]
-    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, subplot)
+    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot)
 
     # Each region is outlined
     reg = glob(op.join(wd, '*'))

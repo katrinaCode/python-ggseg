@@ -64,7 +64,7 @@ def _render_data_(data, wd, cmap, norm, ax, edgecolor):
             pass
 
 
-def _create_figure_(files, figsize, background, title, fontsize, edgecolor):
+def _create_figure_(files, figsize, background, title, fontsize, edgecolor, subplot):
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -77,6 +77,7 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor):
     verts = np.array([(x, y + yoff) for x, y in verts])
 
     fig = plt.figure(figsize=figsize, facecolor=background)
+    fig.add_subplot(subplot)
     ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
                       xlim=(xmin, xmax),  # centering
                       ylim=(ymax, ymin),  # centering, upside down
@@ -110,7 +111,7 @@ def _get_cmap_(cmap, values, vminmax=[]):
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize=15):
+             fontsize=15, subplot=(1,1,1)):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
 
     Parameters
@@ -136,6 +137,8 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             Title displayed above the figure, passed to matplotlib.axes.Axes.set_title
     fontsize: int, optional
             Relative font size for all elements (ticks, labels, title)
+    subplot: tuple, optional
+            To add multiple ggseg figures to one subplot
     """
     import matplotlib.pyplot as plt
     import os.path as op
@@ -148,7 +151,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
                  'medial_right']
     files = [open(op.join(wd, e)).read() for e in whole_reg]
-    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor)
+    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, subplot)
 
     # Each region is outlined
     reg = glob(op.join(wd, '*'))

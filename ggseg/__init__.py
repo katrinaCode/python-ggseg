@@ -182,6 +182,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
                  
     print("returning fig & ax", fig, ax)
+    plt.show()
     return fig, ax
 
 

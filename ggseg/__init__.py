@@ -64,7 +64,7 @@ def _render_data_(data, wd, cmap, norm, ax, edgecolor):
             pass
 
 
-def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig):
+def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot):
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -80,8 +80,8 @@ def _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig)
         print("No figure passed in. Creating a new figure for every plot.")
         fig = plt.figure(figsize=figsize, facecolor=background)
 
-    #fig.add_subplot(subplot[0], subplot[1], subplot[2])
-    ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
+    ax = fig.add_subplot(subplot[0], subplot[1], subplot[2])
+    ax.add_axes([0, 0, 1, 1], frameon=False, aspect=1,
                       xlim=(xmin, xmax),  # centering
                       ylim=(ymax, ymin),  # centering, upside down
                       xticks=[], yticks=[])  # no ticks
@@ -156,7 +156,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
                  'medial_right']
     files = [open(op.join(wd, e)).read() for e in whole_reg]
-    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig)
+    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot)
 
     # Each region is outlined
     reg = glob(op.join(wd, '*'))
@@ -177,8 +177,8 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
 
     # A colorbar is added
     _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
-    print("returning ax")
-    return ax
+    print("not returning ax", ax)
+    return #ax
 
 
 def plot_jhu(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',

@@ -61,7 +61,7 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
     print(ax, norm)
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
-                        shrink=0.8, location="right",fraction=0.02,
+                        shrink=0.9, location="right",fraction=0.01,
                         label= ylabel, ticks = np.linspace(vminmax[0], vminmax[1], 5))
 
 
@@ -207,13 +207,13 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     # A colorbar is added
     if not shareCbar:
         print("not cbar", shareCbar)
-        fig.tight_layout(pad=5.0)
+        fig.tight_layout(pad=10.0)
         _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
     else:
         print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
         if (subplot[0]*subplot[1]) == (subplot[2]):
             print("here")
-            fig.tight_layout(pad=5.0)
+            fig.tight_layout(pad=10.0)
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
             _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, fontsize*0.75, ylabel)
         

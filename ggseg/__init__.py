@@ -140,7 +140,8 @@ class set_plotParams:
 
     def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
                  figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-                 fig = None, subplot=(1,1,1), shareCbar = False,
+                 fig = None, subplot=(1,1,1), shareCbar = False, 
+                 fontsize = 15, labelsize = 10,
                  figurePad = 0.0, labelPad = 0.0, cbarShrink = 1.0, 
                  cbarFrac = 0.1, cbarNTicks = 5):
         """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
@@ -181,7 +182,7 @@ class set_plotParams:
         from glob import glob
         import ggseg
     
-        plotParams = set_plotParams(fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
+        plotParams = set_plotParams(fontsize, labelsize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
         wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
     
         # A figure is created by the joint dimensions of the whole-brain outlines

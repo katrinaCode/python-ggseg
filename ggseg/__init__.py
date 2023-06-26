@@ -1,4 +1,4 @@
-__version__ = '0.1.20'
+__version__ = '0.1.21'
 
 
 def _svg_parse_(path):
@@ -127,6 +127,17 @@ def _get_cmap_(cmap, values, vminmax=[]):
         vmin, vmax = vminmax
     norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
     return cmap, norm
+
+
+class set_plotParams:
+    def __init__(self, fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks):
+        self.fontSize = fontSize
+        self.labelSize = labelSize
+        self.figurePad = figurePad
+        self.labelPad = labelPad
+        self.cbarShrink = cbarShrink
+        self.cbarFrac = cbarFrac
+        self.cbarNTicks = cbarNTicks
 
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',

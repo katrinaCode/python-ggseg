@@ -1,4 +1,4 @@
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 
 def _svg_parse_(path):
@@ -45,18 +45,20 @@ def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
     cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
     cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
-def _add_shared_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
+def _add_shared_colorbar_(ax, fig, cmap, norm, ec, labelsize, ylabel):
     import matplotlib
+    from matplotlib import cm
     from mpl_toolkits.axes_grid1 import make_axes_locatable
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes('right', size='50%', pad=0)
+    #divider = make_axes_locatable(ax)
+    #cax = divider.append_axes('right', size='50%', pad=0)
 
-    cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
-                                           norm=norm,
-                                           orientation='vertical',
-                                           ticklocation='left')
-    cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
-    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+    #cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
+                                         #  norm=norm,
+                                        #   orientation='vertical',
+                                        #   ticklocation='left')
+   # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
+   # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+   cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=ax, shrink=0.95)
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op

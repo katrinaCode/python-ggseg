@@ -61,7 +61,7 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
     print(ax, norm)
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
-                        shrink=0.95, pad=0.2, location="right",fraction=0.1,
+                        shrink=0.9, location="right",fraction=0.05,
                         label= ylabel)
     cbar.set_ticks(np.linspace(vminmax[0], vminmax[1], 5))
 

@@ -1,4 +1,4 @@
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 
 def _svg_parse_(path):
@@ -208,6 +208,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         print("cbar. math: ", subplot[0]*(subplot[1])-1,(subplot[2]))
         if (subplot[0]*subplot[1]-1) == (subplot[2]):
             print("here")
+            fig.tight_layout()
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
             _add_shared_colorbar_(cax, fig, cmap, norm, edgecolor, fontsize*0.75, ylabel)
         

@@ -63,7 +63,7 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
                         shrink=0.9, location="right",fraction=0.01,
                         label= ylabel, ticks = np.linspace(vminmax[0], vminmax[1], 5))
-
+    cbar.ax.tick_params(labelsize=labelsize)
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op

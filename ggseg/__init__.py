@@ -1,4 +1,4 @@
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 
 
 def _svg_parse_(path):
@@ -45,7 +45,7 @@ def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
     cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
     cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
-def _add_shared_colorbar_(ax, fig, cmap, norm, ec, labelsize, ylabel):
+def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     import matplotlib
     from matplotlib import cm
     #from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -59,7 +59,10 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, ec, labelsize, ylabel):
     # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
     # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
     print(ax, norm)
-    cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, shrink=0.95)
+    cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
+                        shrink=0.95, pad=0.2, location="right",fraction=0.1,
+                        label= ylabel)
+    cbar.set_ticks(np.linspace(vminmax[0], vminmax[1], 5))
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -210,7 +213,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             print("here")
             fig.tight_layout()
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, fig, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, fontsize*0.75, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 

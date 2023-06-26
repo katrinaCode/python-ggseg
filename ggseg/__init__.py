@@ -56,9 +56,9 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, ec, labelsize, ylabel):
                                          #  norm=norm,
                                         #   orientation='vertical',
                                         #   ticklocation='left')
-   # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
-   # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
-   cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=ax, shrink=0.95)
+    # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
+    # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+    cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=ax, shrink=0.95)
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op

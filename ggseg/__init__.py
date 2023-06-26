@@ -128,15 +128,6 @@ def _get_cmap_(cmap, values, vminmax=[]):
     norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
     return cmap, norm
 
-class set_plotParams:
-    def __init__(self, fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks):
-        self.fontSize = fontSize
-        self.labelSize = labelSize
-        self.figurePad = figurePad
-        self.labelPad = labelPad
-        self.cbarShrink = cbarShrink
-        self.cbarFrac = cbarFrac
-        self.cbarNTicks = cbarNTicks
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',

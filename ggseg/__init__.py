@@ -208,7 +208,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         if (subplot[0]*subplot[1]-1) == (subplot[2]):
             print("here")
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+            _add_shared_colorbar_(cax, fig, cmap, norm, edgecolor, fontsize*0.75, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 

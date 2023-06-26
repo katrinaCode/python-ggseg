@@ -1,4 +1,4 @@
-__version__ = '0.1.7'
+__version__ = '0.1.9'
 
 
 def _svg_parse_(path):
@@ -32,7 +32,7 @@ def _svg_parse_(path):
     return np.array(codes), np.concatenate(vertices)
 
 
-def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
+def _add_colorbar_(ax, plotParams, cmap, norm, ec, ylabel):
     import matplotlib
     from mpl_toolkits.axes_grid1 import make_axes_locatable
     divider = make_axes_locatable(ax)
@@ -42,29 +42,19 @@ def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
                                            norm=norm,
                                            orientation='vertical',
                                            ticklocation='left')
-    cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
-    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+    cb1.ax.tick_params(labelcolor=ec, labelsize=plotParams.labelSize)
+    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=plotParams.labelSize)
 
-def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
+def _add_shared_colorbar_(ax, fig, plotParams, cmap, norm, vminmax, ec, ylabel):
     import matplotlib
     from matplotlib import cm
     import numpy as np
-    #from mpl_toolkits.axes_grid1 import make_axes_locatable
-    #divider = make_axes_locatable(ax)
-    #cax = divider.append_axes('right', size='50%', pad=0)
 
-    #cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
-                                         #  norm=norm,
-                                        #   orientation='vertical',
-                                        #   ticklocation='left')
-    # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
-    # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
-    print(ax, norm)
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
-                        shrink=0.9, location="right",fraction=0.02,
-                        label= ylabel, ticks = np.round(np.linspace(vminmax[0], vminmax[1], 5)))
-    cbar.ax.tick_params(labelcolor=ec, labelsize=labelsize, left=True)
-    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+                        shrink=plotParams.cbarShrink, location="right", fraction=plotParams.cbarFrac,
+                        ticks = np.round(np.linspace(vminmax[0], vminmax[1], plotParams.cbarNTicks)))
+    cbar.ax.tick_params(labelcolor=ec, labelsize=plotParams.labelSize, left=True)
+    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=plotParams.labelSize, ha = "left")
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -138,95 +128,107 @@ def _get_cmap_(cmap, values, vminmax=[]):
     norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
     return cmap, norm
 
+class set_plotParams:
+    def __init__(self, fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks):
+        self.fontSize = fontSize
+        self.labelSize = labelSize
+        self.figurePad = figurePad
+        self.labelPad = labelPad
+        self.cbarShrink = cbarShrink
+        self.cbarFrac = cbarFrac
+        self.cbarNTicks = cbarNTicks
 
-def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
-             figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize=15, fig = None, subplot=(1,1,1), shareCbar = False):
-    """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
-
-    Parameters
-    ----------
-    data : dict
-            Data to be plotted. Should be passed as a dictionary where each key
-            refers to a region from the cortical Desikan-Killiany atlas. The
-            full list of applicable regions can be found in the folder
-            ggseg/data/dk.
-    cmap : matplotlib colormap, optional
-            The colormap for specified image.
-            Default='Spectral'.
-    vminmax : list, optional
-            Lower and upper bound for the colormap, passed to matplotlib.colors.Normalize
-    background : matplotlib color, if not provided, defaults to black
-    edgecolor : matplotlib color, if not provided, defaults to white
-    bordercolor : matplotlib color, if not provided, defaults to white
-    ylabel : str, optional
-            Label to display next to the colorbar
-    figsize : list, optional
-            Dimensions of the final figure, passed to matplotlib.pyplot.figure
-    title : str, optional
-            Title displayed above the figure, passed to matplotlib.axes.Axes.set_title
-    fontsize: int, optional
-            Relative font size for all elements (ticks, labels, title)
-    fig: matplotlib figure object, optional
-            Needed for iterative subplotting. Figure must be created outside of plot_dk call so multiple axes can be added
-    subplot: tuple, optional
-            To add multiple ggseg figures to one subplot
-    shareCbar: boolean, option
-            To share one colourbar for all subplots
+    def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
+                 figsize=(15, 15), bordercolor='w', vminmax=[], title='',
+                 fig = None, subplot=(1,1,1), shareCbar = False,
+                 figurePad = 0.0, labelPad = 0.0, cbarShrink = 1.0, 
+                 cbarFrac = 0.1, cbarNTicks = 5):
+        """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
     
-    """
-    import matplotlib.pyplot as plt
-    import os.path as op
-    from glob import glob
-    import ggseg
-    #fig = plt.figure()
-    wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
-
-    # A figure is created by the joint dimensions of the whole-brain outlines
-    whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
-                 'medial_right']
-    files = [open(op.join(wd, e)).read() for e in whole_reg]
-    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot)
-
-    # Each region is outlined
-    reg = glob(op.join(wd, '*'))
-    files = [open(e).read() for e in reg]
-    _render_regions_(files, ax, bordercolor, edgecolor)
-
-    # For every region with a provided value, we draw a patch with the color
-    # matching the normalized scale
-    cmap, norm = _get_cmap_(cmap, data.values(), vminmax=vminmax)
-    _render_data_(data, wd, cmap, norm, ax, edgecolor)
-
-    # DKT regions with no provided values are rendered in gray
-    data_regions = list(data.keys())
-    dkt_regions = [op.splitext(op.basename(e))[0] for e in reg]
-    NA = set(dkt_regions).difference(data_regions).difference(whole_reg)
-    files = [open(op.join(wd, e)).read() for e in NA]
-    _render_regions_(files, ax, 'gray', edgecolor)
-
-    # A colorbar is added
-    if not shareCbar:
-        print("not cbar", shareCbar)
-        fig.tight_layout(pad=10.0)
-        _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
-    else:
-        print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
-        if (subplot[0]*subplot[1]) == (subplot[2]):
-            print("here")
-            fig.tight_layout(pad=10.0)
-            cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, fontsize, ylabel)
+        Parameters
+        ----------
+        data : dict
+                Data to be plotted. Should be passed as a dictionary where each key
+                refers to a region from the cortical Desikan-Killiany atlas. The
+                full list of applicable regions can be found in the folder
+                ggseg/data/dk.
+        cmap : matplotlib colormap, optional
+                The colormap for specified image.
+                Default='Spectral'.
+        vminmax : list, optional
+                Lower and upper bound for the colormap, passed to matplotlib.colors.Normalize
+        background : matplotlib color, if not provided, defaults to black
+        edgecolor : matplotlib color, if not provided, defaults to white
+        bordercolor : matplotlib color, if not provided, defaults to white
+        ylabel : str, optional
+                Label to display next to the colorbar
+        figsize : list, optional
+                Dimensions of the final figure, passed to matplotlib.pyplot.figure
+        title : str, optional
+                Title displayed above the figure, passed to matplotlib.axes.Axes.set_title
+        fontsize: int, optional
+                Relative font size for all elements (ticks, labels, title)
+        fig: matplotlib figure object, optional
+                Needed for iterative subplotting. Figure must be created outside of plot_dk call so multiple axes can be added
+        subplot: tuple, optional
+                To add multiple ggseg figures to one subplot
+        shareCbar: boolean, option
+                To share one colourbar for all subplots
         
-    print("returning fig & ax", fig, ax)
-   # try: 
-     #   print("trying")
-     #   fig.tight_layout()
-   # except:
-      #  print("except")
-      #  plt.tight_layout()
-   # plt.show()
-    return fig, ax
+        """
+        import matplotlib.pyplot as plt
+        import os.path as op
+        from glob import glob
+        import ggseg
+    
+        plotParams = set_plotParams(fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
+        wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
+    
+        # A figure is created by the joint dimensions of the whole-brain outlines
+        whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
+                     'medial_right']
+        files = [open(op.join(wd, e)).read() for e in whole_reg]
+        ax = _create_figure_(files, figsize, background, title, plotParams.fontsize, edgecolor, fig, subplot)
+    
+        # Each region is outlined
+        reg = glob(op.join(wd, '*'))
+        files = [open(e).read() for e in reg]
+        _render_regions_(files, ax, bordercolor, edgecolor)
+    
+        # For every region with a provided value, we draw a patch with the color
+        # matching the normalized scale
+        cmap, norm = _get_cmap_(cmap, data.values(), vminmax=vminmax)
+        _render_data_(data, wd, cmap, norm, ax, edgecolor)
+    
+        # DKT regions with no provided values are rendered in gray
+        data_regions = list(data.keys())
+        dkt_regions = [op.splitext(op.basename(e))[0] for e in reg]
+        NA = set(dkt_regions).difference(data_regions).difference(whole_reg)
+        files = [open(op.join(wd, e)).read() for e in NA]
+        _render_regions_(files, ax, 'gray', edgecolor)
+    
+        # A colorbar is added
+        if not shareCbar:
+            print("not cbar", shareCbar)
+            fig.tight_layout(pad=10.0)
+            _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+        else:
+            print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
+            if (subplot[0]*subplot[1]) == (subplot[2]):
+                print("here")
+                fig.tight_layout(pad=10.0)
+                cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
+                _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, plotParams.labelSize, ylabel)
+            
+        print("returning fig & ax", fig, ax)
+       # try: 
+         #   print("trying")
+         #   fig.tight_layout()
+       # except:
+          #  print("except")
+          #  plt.tight_layout()
+       # plt.show()
+        return fig, ax
 
 
 def plot_jhu(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',

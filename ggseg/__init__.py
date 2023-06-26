@@ -1,4 +1,4 @@
-__version__ = '0.1.9'
+__version__ = '0.1.20'
 
 
 def _svg_parse_(path):
@@ -140,8 +140,8 @@ class set_plotParams:
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fig = None, subplot=(1,1,1), shareCbar = False, 
              fontsize = 15, labelsize = 10,
+             fig = None, subplot=(1,1,1), shareCbar = False, 
              figurePad = 0.0, labelPad = 0.0, cbarShrink = 1.0, 
              cbarFrac = 0.1, cbarNTicks = 5):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.

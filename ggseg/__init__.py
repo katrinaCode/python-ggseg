@@ -48,6 +48,7 @@ def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
 def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     import matplotlib
     from matplotlib import cm
+    import numpy as np
     #from mpl_toolkits.axes_grid1 import make_axes_locatable
     #divider = make_axes_locatable(ax)
     #cax = divider.append_axes('right', size='50%', pad=0)

@@ -1,4 +1,4 @@
-__version__ = '0.1.7'
+__version__ = '0.1.7.0'
 
 
 def _svg_parse_(path):
@@ -64,7 +64,7 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
                         shrink=0.9, location="right",fraction=0.02,
                         label= ylabel, ticks = np.round(np.linspace(vminmax[0], vminmax[1], 5)))
     cbar.ax.tick_params(labelcolor=ec, labelsize=labelsize, left=True)
-    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize, position="left")
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -141,7 +141,7 @@ def _get_cmap_(cmap, values, vminmax=[]):
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize=15, fig = None, subplot=(1,1,1), shareCbar = False):
+             fontsize=15, labelsize=10, fig = None, subplot=(1,1,1), shareCbar = False):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
 
     Parameters
@@ -166,7 +166,9 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     title : str, optional
             Title displayed above the figure, passed to matplotlib.axes.Axes.set_title
     fontsize: int, optional
-            Relative font size for all elements (ticks, labels, title)
+            Relative font size for some elements (ticks, title)
+    labelsize: int, optional 
+            Font size for labels
     fig: matplotlib figure object, optional
             Needed for iterative subplotting. Figure must be created outside of plot_dk call so multiple axes can be added
     subplot: tuple, optional

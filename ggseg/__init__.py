@@ -64,7 +64,7 @@ def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
                         shrink=0.9, location="right",fraction=0.02,
                         label= ylabel, ticks = np.round(np.linspace(vminmax[0], vminmax[1], 5)))
     cbar.ax.tick_params(labelcolor=ec, labelsize=labelsize, left=True)
-    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize, position="left")
+    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize, ha="left")
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -181,7 +181,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     import os.path as op
     from glob import glob
     import ggseg
-    print("labelsize: ", labelsize)
+    
     #fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 
@@ -215,6 +215,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         _add_colorbar_(ax, cmap, norm, edgecolor, labelsize, ylabel)
     else:
         print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
+        print("labelsize: ", labelsize)
         # if it's the final subplot
         if (subplot[0]*subplot[1]) == (subplot[2]):
             print("here")

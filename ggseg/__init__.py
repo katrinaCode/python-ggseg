@@ -1,4 +1,4 @@
-__version__ = '0.1.7.1'
+__version__ = '0.1.7.2'
 
 
 def _svg_parse_(path):
@@ -184,7 +184,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     
     #fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
-
+    print('TEST 1')
     # A figure is created by the joint dimensions of the whole-brain outlines
     whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
                  'medial_right']
@@ -214,6 +214,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         fig.tight_layout(pad=10.0)
         _add_colorbar_(ax, cmap, norm, edgecolor, labelsize, ylabel)
     else:
+        print("TEST 2"
         print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
         print("labelsize: ", labelsize)
         # if it's the final subplot
@@ -224,6 +225,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, labelsize, ylabel)
         
     print("returning fig & ax", fig, ax)
+    print("TEST 3")
    # try: 
      #   print("trying")
      #   fig.tight_layout()

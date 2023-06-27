@@ -211,14 +211,15 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     if not shareCbar:
         print("not cbar", shareCbar)
         fig.tight_layout(pad=10.0)
-        _add_colorbar_(ax, cmap, norm, edgecolor, fontsize*0.75, ylabel)
+        _add_colorbar_(ax, cmap, norm, edgecolor, labelsize, ylabel)
     else:
         print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
+        # if it's the final subplot
         if (subplot[0]*subplot[1]) == (subplot[2]):
             print("here")
             fig.tight_layout(pad=10.0)
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, fontsize, ylabel)
+            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, labelsize, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 

@@ -1,4 +1,4 @@
-__version__ = '0.1.21'
+__version__ = '0.1.22'
 
 
 def _svg_parse_(path):
@@ -45,16 +45,16 @@ def _add_colorbar_(ax, plotParams, cmap, norm, ec, ylabel):
     cb1.ax.tick_params(labelcolor=ec, labelsize=plotParams.labelSize)
     cb1.ax.set_ylabel(ylabel, color=ec, fontsize=plotParams.labelSize)
 
-def _add_shared_colorbar_(ax, fig, plotParams, cmap, norm, vminmax, ec, ylabel):
+def _add_shared_colorbar_(ax, fig, plotParams, cmap, norm, vminmax, ec, ylabel, cbarShrink, cbarFrac, cbarNTicks):
     import matplotlib
     from matplotlib import cm
     import numpy as np
 
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
-                        shrink=plotParams.cbarShrink, location="right", fraction=plotParams.cbarFrac,
-                        ticks = np.round(np.linspace(vminmax[0], vminmax[1], plotParams.cbarNTicks)))
-    cbar.ax.tick_params(labelcolor=ec, labelsize=plotParams.labelSize, left=True)
-    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=plotParams.labelSize, ha = "left")
+                        shrink=cbarShrink, location="right", fraction=cbarFrac,
+                        ticks = np.round(np.linspace(vminmax[0], vminmax[1], cbarNTicks)))
+    cbar.ax.tick_params(labelcolor=ec, labelsize=labelSize, left=True)
+    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelSize, ha = "left")
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -129,16 +129,6 @@ def _get_cmap_(cmap, values, vminmax=[]):
     return cmap, norm
 
 
-class set_plotParams:
-    def __init__(self, fontSize, labelSize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks):
-        self.fontSize = fontSize
-        self.labelSize = labelSize
-        self.figurePad = figurePad
-        self.labelPad = labelPad
-        self.cbarShrink = cbarShrink
-        self.cbarFrac = cbarFrac
-        self.cbarNTicks = cbarNTicks
-
 
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
@@ -184,14 +174,14 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     from glob import glob
     import ggseg
 
-    plotParams = set_plotParams(fontsize, labelsize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
+    #plotParams = set_plotParams(fontsize, labelsize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 
     # A figure is created by the joint dimensions of the whole-brain outlines
     whole_reg = ['lateral_left', 'medial_left', 'lateral_right',
                  'medial_right']
     files = [open(op.join(wd, e)).read() for e in whole_reg]
-    ax = _create_figure_(files, figsize, background, title, plotParams.fontsize, edgecolor, fig, subplot)
+    ax = _create_figure_(files, figsize, background, title, fontsize, edgecolor, fig, subplot)
 
     # Each region is outlined
     reg = glob(op.join(wd, '*'))
@@ -221,7 +211,8 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             print("here")
             fig.tight_layout(pad=10.0)
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, plotParams.labelSize, ylabel)
+            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, labelSize, ylabel,
+                                 cbarShrink, cbarFrac, cbarNTicks)
         
     print("returning fig & ax", fig, ax)
    # try: 

@@ -1,4 +1,4 @@
-__version__ = '0.1.7.0'
+__version__ = '0.1.7.1'
 
 
 def _svg_parse_(path):
@@ -181,6 +181,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     import os.path as op
     from glob import glob
     import ggseg
+    print("labelsize: ", labelsize)
     #fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 

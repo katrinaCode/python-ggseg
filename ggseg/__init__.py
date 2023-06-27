@@ -214,7 +214,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
         fig.tight_layout(pad=10.0)
         _add_colorbar_(ax, cmap, norm, edgecolor, labelsize, ylabel)
     else:
-        print("TEST 2"
+        print("TEST 2")
         print("cbar. math: ", subplot[0]*(subplot[1]),(subplot[2]))
         print("labelsize: ", labelsize)
         # if it's the final subplot

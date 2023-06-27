@@ -1,4 +1,4 @@
-__version__ = '0.1.22'
+__version__ = '0.1.7'
 
 
 def _svg_parse_(path):
@@ -32,7 +32,7 @@ def _svg_parse_(path):
     return np.array(codes), np.concatenate(vertices)
 
 
-def _add_colorbar_(ax, plotParams, cmap, norm, ec, ylabel):
+def _add_colorbar_(ax, cmap, norm, ec, labelsize, ylabel):
     import matplotlib
     from mpl_toolkits.axes_grid1 import make_axes_locatable
     divider = make_axes_locatable(ax)
@@ -42,19 +42,29 @@ def _add_colorbar_(ax, plotParams, cmap, norm, ec, ylabel):
                                            norm=norm,
                                            orientation='vertical',
                                            ticklocation='left')
-    cb1.ax.tick_params(labelcolor=ec, labelsize=plotParams.labelSize)
-    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=plotParams.labelSize)
+    cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
+    cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
-def _add_shared_colorbar_(ax, fig, plotParams, cmap, norm, vminmax, ec, ylabel, cbarShrink, cbarFrac, cbarNTicks):
+def _add_shared_colorbar_(ax, fig, cmap, norm, vminmax, ec, labelsize, ylabel):
     import matplotlib
     from matplotlib import cm
     import numpy as np
+    #from mpl_toolkits.axes_grid1 import make_axes_locatable
+    #divider = make_axes_locatable(ax)
+    #cax = divider.append_axes('right', size='50%', pad=0)
 
+    #cb1 = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap,
+                                         #  norm=norm,
+                                        #   orientation='vertical',
+                                        #   ticklocation='left')
+    # cb1.ax.tick_params(labelcolor=ec, labelsize=labelsize)
+    # cb1.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
+    print(ax, norm)
     cbar = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax, 
-                        shrink=cbarShrink, location="right", fraction=cbarFrac,
-                        ticks = np.round(np.linspace(vminmax[0], vminmax[1], cbarNTicks)))
-    cbar.ax.tick_params(labelcolor=ec, labelsize=labelSize, left=True)
-    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelSize, ha = "left")
+                        shrink=0.9, location="right",fraction=0.02,
+                        label= ylabel, ticks = np.round(np.linspace(vminmax[0], vminmax[1], 5)))
+    cbar.ax.tick_params(labelcolor=ec, labelsize=labelsize, left=True)
+    cbar.ax.set_ylabel(ylabel, color=ec, fontsize=labelsize)
 
 def _render_data_(data, wd, cmap, norm, ax, edgecolor):
     import os.path as op
@@ -129,13 +139,9 @@ def _get_cmap_(cmap, values, vminmax=[]):
     return cmap, norm
 
 
-
 def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
              figsize=(15, 15), bordercolor='w', vminmax=[], title='',
-             fontsize = 15, labelsize = 10,
-             fig = None, subplot=(1,1,1), shareCbar = False, 
-             figurePad = 0.0, labelPad = 0.0, cbarShrink = 1.0, 
-             cbarFrac = 0.1, cbarNTicks = 5):
+             fontsize=15, fig = None, subplot=(1,1,1), shareCbar = False):
     """Plot cortical ROI data based on a Desikan-Killiany (DK) parcellation.
 
     Parameters
@@ -173,8 +179,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
     import os.path as op
     from glob import glob
     import ggseg
-
-    #plotParams = set_plotParams(fontsize, labelsize, figurePad, labelPad, cbarShrink, cbarFrac, cbarNTicks)
+    #fig = plt.figure()
     wd = op.join(op.dirname(ggseg.__file__), 'data', 'dk')
 
     # A figure is created by the joint dimensions of the whole-brain outlines
@@ -211,8 +216,7 @@ def plot_dk(data, cmap='Spectral', background='k', edgecolor='w', ylabel='',
             print("here")
             fig.tight_layout(pad=10.0)
             cax = fig.axes #fig.add_subplot(subplot[0], subplot[1], (subplot[1],subplot[0]*subplot[1]))
-            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, labelSize, ylabel,
-                                 cbarShrink, cbarFrac, cbarNTicks)
+            _add_shared_colorbar_(cax, fig, cmap, norm, vminmax, edgecolor, fontsize, ylabel)
         
     print("returning fig & ax", fig, ax)
    # try: 
